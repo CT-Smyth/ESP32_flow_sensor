@@ -1,10 +1,16 @@
 ESP32 based process controller.
 
-Especially designed for interfacing with common waterflow sensors, 0-20ma (4-20ma) level sensors, etc and controlling valve shutoffs, pumps, etc.
-Analog, switch, and pulse input types. Controls based on levels, time, and pulses. 2 Dedicated outputs - 1 for "horn" or whatever, and one for relay and pulse output.
-Communicates over modbus-IP for industrial control systems. Designed to be used with or without I2C OLED displays based on the SD1306 architecture.
-Could easily be adapted to modbus serial without a library change.
+Especially designed for interfacing with common waterflow sensors, 0-20ma (4-20ma) level sensors, etc and 
+controlling valve shutoffs, pumps, etc. Analog, switch, and pulse input types. Controls based on levels, 
+time, and pulses. 2 Dedicated outputs - 1 for "horn" or whatever, and one for relay and pulse output.
+Communicates over modbus-IP for industrial control systems. Designed to be used with or without I2C OLED 
+displays based on the SD1306 architecture. Could easily be adapted to modbus serial without a library change.
 Supports hidden wifi, OTA updates, and massive configurability.
+
+Tested with SD1306 128x64 and wierd integrated 72x40 oled displays (see defines)
+Tested on ESP32 S3, C3, S2
+Specifically wemos-D1 mini32, wemos S2_mini, DFrobot (generic) tiny C3 units with integrated 0.42" OLED (see photo)
+
 
 Pretty rough but robust and reliable - Ill work on cleaning it up for readability as i go.
 
@@ -15,9 +21,21 @@ Pretty rough but robust and reliable - Ill work on cleaning it up for readabilit
 // if connected to an AP, portal at above or at IP or at esp32-xxxxxx.local
 
 // button wakes display & cycles through display modes. 1 sec saves data and 
-// sends manpage to serial. 10 seconds runs priming pulses, 15 seconds for reset.
+// sends manpage to serial. 10 seconds runs priming pulses, 15 seconds for reset with portal for config and OTA.
 
 // Must be compiled with "minimal spiffs" for OTA to work
+
+
+
+Included node-red configurator tool with examples on how to interface modbus to node-red
+
+to get going - read the main .ino and modify the code for your platform (pins etc) as needed
+
+boots up into AP mode if no wifi credentials found.
+connect to built in wifi and go to 192.168.4.1 to set up wifi, get IP address, hostname, etc
+
+See the node-red example to interface with the unit.
+
 
 //________________________________TO__DO_________________________________
 
