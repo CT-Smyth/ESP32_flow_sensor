@@ -10,70 +10,50 @@ void _setup() {
   pinMode(pulse_in_pin, INPUT);
   pinMode(button_in_pin, INPUT_PULLUP);
 
-  //WIFI SETUP
-  // WiFi.begin(ssid, password);
-  // while (WiFi.status() != WL_CONNECTED) {
-  //   delay(500);
-  //   Serial.print(".");
-  // }
-  // Serial.println("");
-  // Serial.println("WiFi connected");
-  // Serial.print("IP address: ");
-  // Serial.print(WiFi.localIP());
-  // Serial.print("\nMAC Address: ");
-  // Serial.println(WiFi.macAddress());
-    // Try to connect to flash stored SSID, start AP if fails after timeout
-  IPAddress myIP = server.startWiFi(15000, "ESP_AP", "123456789" );
 
-  // FILESYSTEM INIT
-  startFilesystem();
+  // WiFi.mode(WIFI_STA); // explicitly set mode, esp defaults to STA+AP
+  // it is a good practice to make sure your code sets wifi mode how you want it.
 
-  /*
-  * Getting FS info (total and free bytes) is strictly related to
-  * filesystem library used (LittleFS, FFat, SPIFFS etc etc) and ESP framework
-  */
-  #ifdef ESP32
-  server.setFsInfoCallback([](fsInfo_t* fsInfo) {
-    fsInfo->fsName = "LittleFS";
-    fsInfo->totalBytes = LittleFS.totalBytes();
-    fsInfo->usedBytes = LittleFS.usedBytes();
-  });
-  #endif
+  // put your setup code here, to run once:
+  Serial.begin(115200);
 
-  // Enable ACE FS file web editor and add FS info callback function
-  server.enableFsCodeEditor();
+  //WiFiManager, Local intialization. Once its business is done, there is no need to keep it around
+  WiFiManager wm;
 
-  // Add custom handlers to webserver
-  server.on("/led", HTTP_GET, handleLed);
-  server.on("/firmware_update", HTTP_GET, handleUpdate);
+  // reset settings - wipe stored credentials for testing
+  // these are stored by the esp library
+  // wm.resetSettings();
 
-  // Add handler as lambda function (just to show a different method)
-  server.on("/version", HTTP_GET, [](AsyncWebServerRequest *request) {
-    server.getOptionValue("New firmware JSON", fimwareInfo);
+  // Automatically connect using saved credentials,
+  // if connection fails, it starts an access point with the specified name ( "AutoConnectAP"),
+  // if empty will auto generate SSID, if password is blank it will be anonymous AP (wm.autoConnect())
+  // then goes into a blocking loop awaiting configuration and will return success result
 
-    EEPROM.get(0, fw_version);
-    if (fw_version[0] == 0xFF) // Still not stored in EEPROM (first run)
-      strcpy(fw_version, "0.0.0");
-    String reply = "{\"version\":\"";
-    reply += fw_version;
-    reply += "\", \"newFirmwareInfoJSON\":\"";
-    reply += fimwareInfo;
-    reply += "\"}";
-    // Send to client actual firmware version and address where to check if new firmware available
-    request->send(200, "text/json", reply);
-  });
+  bool res;
+  // res = wm.autoConnect(); // auto generated AP name from chipid
+  // res = wm.autoConnect("AutoConnectAP"); // anonymous ap
+  res = wm.autoConnect("AutoConnectAP", "1qazXSW@");  // password protected ap
 
-  // Configure /setup page and start Web Server
-  server.addOptionBox("Remote Update");
-  server.addOption("New firmware JSON", fimwareInfo);
+  if (!res) {
+    Serial.println("Failed to connect");
+    // ESP.restart();
+  } else {
+    //if you get here you have connected to the WiFi
+    Serial.println("connected...yeey :)");
+  }
 
-  // Start server with built-in websocket event handler
-  server.init();
+  Serial.print("\nDefault ESP32 MAC Address: ");
+  Serial.println(WiFi.macAddress());
+  Serial.println(WiFi.localIP());
 
-  
+  loadData();
+  if (valid_flash != 12345) {
+    resetDefaults();
+  }
+
   // print out docs--------------------------------------------------------------------------------------
   Serial.println("---------------------------------------------------------------------------------------");
-  Serial.println("Modbus IP enabled Chlorination Controller V3");
+  Serial.println("Modbus IP enabled Process Controller V3");
   Serial.println("---------------------------------------------------------------------------------------");
   Serial.println("\nListens for modbus on port 502 - Slave ID not important");
   Serial.println("\n\nCOILs:");
@@ -99,15 +79,10 @@ void _setup() {
   Serial.print(F("ESP Web Server started on IP Address: "));
   Serial.println(WiFi.localIP());
   Serial.println(F(
-    "This is \"remoteOTA.ino\" example.\n"
-    "Open /setup page to configure optional parameters.\n"
-    "Open /edit page to view, edit or upload example or your custom webserver source files."
-  ));
+    "Open /setup page to configure.\n"
+    "Open /edit page to view, edit or upload example or your custom webserver source files."));
 
-  loadData();
-  if (valid_flash != 12345) {
-    resetDefaults();
-  }
+
 
   //MODBUS SETUP
   mBus.server();

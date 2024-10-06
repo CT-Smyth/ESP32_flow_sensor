@@ -1,13 +1,9 @@
 //----------------------------------TODO-------------------------------------------
-
-//Implement Wifi Manager with client mode then AP mode if client connection fails
-// ?? https://randomnerdtutorials.com/esp32-wi-fi-manager-asyncwebserver/
-
 //wifi signal strength available over modbus ?? WiFi.RSSI()
-//OTA updating   ??https://randomnerdtutorials.com/esp32-ota-over-the-air-arduino/
-//more testing
-//test flash storage works
-//LED linked to pulse input
+
+//more testing --- test flash storage works
+//FIX address for update server
+//Allow setting of calibration variables in the webserver
 //serial bluetooth? https://randomnerdtutorials.com/esp32-bluetooth-classic-arduino-ide/
 //make BT name unuiqe? use ChipID?  Make it settable in preferences using pushbutton to enter a config mode?
 
@@ -44,24 +40,34 @@
 // SAVE_INTERVAL_CAL = 12;     //(13) ---Save interval. How many pulses between saves to flash
 
 
-#include <WiFi.h>
-#include <Preferences.h>
-#include <ModbusIP_ESP8266.h>
-#include <WiFiClientSecure.h>
-#include <HTTPClient.h>
-#include <HTTPUpdate.h>
-#include <EEPROM.h>  // For storing the firmware version
-#include <FS.h>
-#include <LittleFS.h>
-#include <AsyncFsWebServer.h>  // https://github.com/cotestatnt/async-esp-fs-webserver/
+#include <WiFi.h> //builtin
+#include <WiFiManager.h> // https://github.com/tzapu/WiFiManager
+#include <Preferences.h> //included
+#include <ModbusIP_ESP8266.h> //4.10 https://github.com/emelianov/modbus-esp8266
+//#include <WiFiClientSecure.h> //builtin
+//#include <HTTPClient.h> //builtin
+//#include <HTTPUpdate.h> //builtin
+#include <EEPROM.h>  //builtin For storing the firmware version
+#include <FS.h> //builtin
+//#include <LittleFS.h>
+//#include <AsyncFsWebServer.h>  //1.07 https://github.com/cotestatnt/async-esp-fs-webserver/
+
+
+
+#define _SENSOR_PULSES "Sensor pulses since last unit"
+#define _LIFETIME_UNITS_MSW "Logged Units x 65336 (IREG0)"
+#define _LIFETIME_UNITS_LSW "Logged Units (IREG1)"
+#define _PULSES_TODO "Output Pulse Cycles TODO (IREG2)"
+
+#define _PULSE_MS "Output pulse length in mS (HREG9)"
+#define _PULSES_PER_UNIT "Input pulses per unit (HREG10)"
+#define _PULSES_FOR_PRIME "Priming Pulses (HREG11)"
+#define _SAVE_INTERVAL "Units for save interval (HREG12)"
 
 Preferences keystore;
 
-#define FILESYSTEM LittleFS
-AsyncFsWebServer server(80, FILESYSTEM);
-
-String fimwareInfo = "https://raw.githubusercontent.com/cotestatnt/async-esp-fs-webserver/master/examples/remoteOTA/version-esp32.json";
-char fw_version[10] = {"0.0.0"};
+//#define FILESYSTEM LittleFS
+//AsyncFsWebServer server(80, FILESYSTEM);
 
 //Add your wifi network's credentials here
 const char* ssid = "BELLAVISTA";
@@ -89,7 +95,7 @@ const int SAVE_INTERVAL_CAL = 12;     //(13) HREG
 
 
 //Pins
-const int pulse_in_pin = 16;
+const int pulse_in_pin = 18;
 const int button_in_pin = 4;
 
 const int ledPin = LED_BUILTIN;
@@ -125,6 +131,7 @@ bool pulse_on_in_progress = false;
 bool pulse_off_in_progress = false;
 bool call_for_pulse = false;
 bool last_pulse_pin_state;
+bool captiveRun = false;
 
 //ModbusIP object
 ModbusIP mBus;
@@ -136,6 +143,7 @@ void setup() {
 
 //-----------------------------------------------------------------------------------------------
 void loop() {
+  //esp_task_wdt_reset();
 
   if (millis() > PulseInTime) {  // check pulses every 1ms
     PulseInTime = millis();
@@ -177,6 +185,7 @@ void loop() {
 uint checkPulse() {
   bool pulse_pin_state;
   pulse_pin_state = digitalRead(pulse_in_pin);
+  digitalWrite(ledPin, pulse_pin_state);
   if (last_pulse_pin_state != pulse_pin_state) {
     last_pulse_pin_state = pulse_pin_state;
     return (pulse_pin_state);  // 1 for changed to true, 0 if changed to false
