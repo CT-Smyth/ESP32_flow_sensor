@@ -436,6 +436,10 @@ void manPage() {
   Serial.print(analog_sense);
   Serial.print("\nUNITS_QUEUED            <10>-              Units not yet consumed by jobs--> ");
   Serial.print(units_queued);
+  Serial.print("\WIFI_RSSI                <11>-                                            --> ");
+  Serial.print(WiFi.RSSI());
+  Serial.print("\UPTIME_HRS               <12>-                                            --> ");
+  Serial.print(millis() / 3600000); 
   Serial.print("\n\n---------------------------------------------------------------------------------------");
 
   Serial.print("\n                     LIFETIME LOGGED UNITS >>> : ");

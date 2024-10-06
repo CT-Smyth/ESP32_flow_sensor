@@ -1,3 +1,13 @@
+// ESP32 based process controller.
+
+// Especially designed for interfacing with common waterflow sensors, 0-20ma (4-20ma) level sensors, etc and controlling valve shutoffs, pumps, etc.
+// Analog, switch, and pulse input types. Controls based on levels, time, and pulses. 2 Dedicated outputs - 1 for "horn" or whatever, and one for relay and pulse output.
+// Communicates over modbus-IP for industrial control systems. Designed to be used with or without I2C OLED displays based on the SD1306 architecture.
+// Could easily be adapted to modbus serial without a library change.
+// Supports hidden wifi, OTA updates, and massive configurability.
+
+// Pretty rough but robust and reliable - Ill work on cleaning it up for readability as i go.
+
 
 // Listens for modbus on port 502 - Slave ID not important
 // HOST_NAME = "esp32-xxxxxx";  //set hostname to <hostname>.local
@@ -117,7 +127,11 @@
 //  OUTPUT_PULSES_TODO      <7>-              Number of output pulses pending-->  
 //  SENSOR_PULSES           <8>-                      UNCOUNTED sensor pulses-->  
 //  ANALOG_SENSE            <9>-                                 Analog input-->  
-//  UNITS_QUEUED            <10>-              Units not yet consumed by jobs-->  
+//  UNITS_QUEUED            <10>-              Units not yet consumed by jobs-->
+//  WIFI_RSSI               <11>-                                            -->  
+//  UPTIME_HRS              <12>-                                            -->    
+
+
 //    --------------------------------------------------------------------------------------- 
 
 
