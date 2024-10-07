@@ -1,3 +1,6 @@
+//TODO make multi-reset capability to change default display mode
+
+
 // ESP32 based process controller.
 
 // Especially designed for interfacing with common waterflow sensors, 0-20ma (4-20ma) level sensors, etc and controlling valve shutoffs, pumps, etc.
