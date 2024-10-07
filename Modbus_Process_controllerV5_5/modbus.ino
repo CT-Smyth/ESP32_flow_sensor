@@ -14,10 +14,12 @@ void syncModbusData() {
   mBus.Ireg(SENSOR_PULSES, sensor_pulses);
   mBus.Ireg(ANALOG_SENSE, analog_sense);
   mBus.Ireg(UNITS_QUEUED, units_queued);
+  mBus.Ireg(UPTIME_HRS, uptime);
+  mBus.Ireg(WIFI_RSSI, rssi_db);
+
   mBus.Hreg(UNITS_SINCE_BOOT, units_since_boot);
   mBus.Hreg(FLOW_TIME_SINCE_BOOT, flow_time_since_boot);
-  mBus.Hreg(UPTIME_HRS, uptime);
-  mBus.Hreg(WIFI_RSSI, rssi_db);
+  
 
 }
 
@@ -80,16 +82,6 @@ uint16_t get_RELAY_callback(TRegister* reg, uint16_t val) {
   //manPage();
   return val;
 }
-
-// uint16_t set_LATCH_RESET_callback(TRegister* reg, uint16_t val) {
-//   latchReset();
-//   return val;
-// }
-// uint16_t get_LATCH_RESET_callback(TRegister* reg, uint16_t val) {
-//   //Serial.print("value = ");
-//   //Serial.println(val);
-//   return val;
-// }
 
 uint16_t set_STOP_callback(TRegister* reg, uint16_t val) {
   Serial.println("STOP OPERATION");
@@ -291,6 +283,7 @@ uint16_t get_PIN_MODE_callback(TRegister* reg, uint16_t val) {
 
 uint16_t set_SENSOR_PULSES_PER_UNIT_callback(TRegister* reg, uint16_t val) {
   sensor_pulses_per_unit = val;
+  if (sensor_pulses_per_unit < 1) sensor_pulses_per_unit = 1;
   saveSettings();
   return val;
 }
@@ -546,15 +539,6 @@ uint16_t get_FLOWRATE_SECONDS_callback(TRegister* reg, uint16_t val) {
 
 uint16_t set_ADD_TOTAL_UNITS_callback(TRegister* reg, uint16_t val) {
   addUnits(val * 10);
-  // u_long lftime = u_long((lifetime_units_MSW * 65536) + lifetime_units_LSW);
-  // lftime = lftime + (val * 10);
-
-  // u_long mswToAdd = lftime / 65536;
-  // u_long lswToAdd = (lftime - (mswToAdd * 65536)); //remainder
-
-  // lifetime_units_LSW = uint16_t(lswToAdd);
-  // lifetime_units_MSW = uint16_t(mswToAdd);
-
   saveData();
   return val;
 }

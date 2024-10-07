@@ -198,10 +198,10 @@ void resetDefaults() {  //reset to factory defaults
   pin_mode = 0;
   sensor_pulses_per_unit = 150;
   save_interval = 100;
-  horn_units = 0;
-  relay_units = 0;
-  horn_seconds = 0;
-  relay_seconds = 0;
+  horn_units = 10;
+  relay_units = 100;
+  horn_seconds = 10;
+  relay_seconds = 15;
   flow_stop_seconds = 5;
   relay_latchmode = 0;
   horn_latchmode = 0;
@@ -209,7 +209,7 @@ void resetDefaults() {  //reset to factory defaults
   output_pulse_off_ms = 200;
   units_per_event = 10;
   output_pulses_per_trigger = 1;
-  output_pulses_for_prime = 0;
+  output_pulses_for_prime = 1;
   min_flow = 0;
   analog_threshold = 0;
   analog_map_min = 0;
