@@ -9,6 +9,8 @@
 #include <OneBitDisplay.h>
 #include "esp_task_wdt.h"
 
+#define WDT_TIMEOUT 30
+
 
 //#define C3_42_OLED  // enable this if you're using the .42" oled and not the standard .96" or 1.3"
 #define WEMOS_MINI_32 //S3 with generic 128x64 OLED
@@ -86,7 +88,6 @@ WiFiManager wm;
 
 //Display
 OBDISP oled;
-
 
 //Network Options
 //#define STATIC_IP
@@ -657,8 +658,6 @@ void loop() {
   } else {
     digitalWrite(ledPin, !ledOn);
   }
-
-
 
   delay(0);  //allow service routines for single core processors
 }

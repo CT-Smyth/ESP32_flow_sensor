@@ -15,15 +15,16 @@ void config_and_init() {
   WPASS = wm.getWiFiPass();
   WSSID = wm.getWiFiSSID();
 
+  loadBootMode();
+
   if (WSSID != "") {
     Serial.print("\nConnect Wifi to:");
     Serial.print(WSSID);
     Serial.print("  Using:");
     Serial.println(WPASS);
     WiFi.begin(WSSID, WPASS);
-
   } else {
-    Serial.println("No credentials found. Reboot while holding down button to configure");
+    Serial.println("No credentials found. Launching config portal");
     boot_mode = 1;
   }
 
@@ -242,7 +243,7 @@ void config_and_init() {
   mBus.task();
 
 // ESP32 Watchdog timer -    Note: esp32 board manager v3.x.x requires different code
-#define WDT_TIMEOUT 30
+
 
 #if defined ESP32
   esp_task_wdt_deinit();  // ensure a watchdog is not already configured
@@ -279,11 +280,7 @@ void config_and_init() {
   restoreOutputs();
   syncModbusData();
   syncModbusSettings();
-  loadBootMode();
   display_mode = 2;
-
-  Serial.print("BOOT MODE: ");
-  Serial.println(boot_mode);
 
   system_initialized = true;
 
@@ -310,6 +307,9 @@ void config_and_init() {
 #endif
 
 #endif
+
+Serial.print("BOOT MODE: ");
+  Serial.println(boot_mode);
 
   delay(2000);
   int debounce = 0;
@@ -365,9 +365,11 @@ obdFill(&oled, OBD_WHITE, 1);
     digitalWrite(ledPin, ledOn);
     delay(150);
     digitalWrite(ledPin, !ledOn);
+
     wm.setConfigPortalBlocking(false);
     wm.setConfigPortalTimeout(300);
     wm.startConfigPortal();
+    
     delay(10000);
   }
 
