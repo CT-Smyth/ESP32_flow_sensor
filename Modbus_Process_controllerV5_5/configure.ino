@@ -50,12 +50,12 @@ void config_and_init() {
 
   //ISTS
   mBus.addIsts(HORN_COIL);
-  //mBus.onSetIsts(HORN_COIL, set_HORN_ISTS_callback);
-  //mBus.onGetIsts(HORN_COIL, get_HORN_ISTS_callback);
+  mBus.onSetIsts(HORN_COIL, set_HORN_ISTS_callback);
+  mBus.onGetIsts(HORN_COIL, get_HORN_ISTS_callback);
 
   mBus.addIsts(RELAY_COIL);
-  // mBus.onSetIsts(RELAY_COIL, set_RELAY_ISTS_callback);
-  // mBus.onGetIsts(RELAY_COIL, get_RELAY_ISTS_callback);
+  mBus.onSetIsts(RELAY_COIL, set_RELAY_ISTS_callback);
+  mBus.onGetIsts(RELAY_COIL, get_RELAY_ISTS_callback);
 
   //IREGs
   mBus.addIreg(LIFETIME_UNITS_MSW, lifetime_units_MSW);
@@ -370,4 +370,5 @@ obdFill(&oled, OBD_WHITE, 1);
     wm.startConfigPortal();
     delay(10000);
   }
+
 }

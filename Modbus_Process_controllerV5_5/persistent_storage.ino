@@ -3,10 +3,9 @@
 // KEYSTORE KEYLENGTH MAX 15 CHAR!!!!!
 
 void saveData() {
-  //Serial.println("\nSAVE DATA");
+  Serial.println("\nSAVE DATA");
   last_save = millis();
   blink = millis() + 200;
-
   keystore.begin("keyData", false);
   keystore.putUShort("relay_status", relay_status);
   keystore.putUShort("horn_status", horn_status);
@@ -24,7 +23,7 @@ void saveData() {
 void saveSettings() {
   if (system_initialized == true) {
     blink = millis() + 200;
-    //Serial.println("\nSAVE SETTINGS");
+    Serial.println("\nSAVE SETTINGS");
     valid_flash = 12345;
     keystore.begin("keyData", false);
     keystore.putUShort("valid_flash", valid_flash);

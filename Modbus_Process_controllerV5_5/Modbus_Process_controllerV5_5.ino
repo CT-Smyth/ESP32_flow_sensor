@@ -10,8 +10,8 @@
 #include "esp_task_wdt.h"
 
 
-#define C3_42_OLED  // enable this if you're using the .42" oled and not the standard .96" or 1.3"
-//#define WEMOS_MINI_32 //S3 with generic 128x64 OLED
+//#define C3_42_OLED  // enable this if you're using the .42" oled and not the standard .96" or 1.3"
+#define WEMOS_MINI_32 //S3 with generic 128x64 OLED
 //#define S2_mini with generic 128x64 OLED (pins not yet complete)
 
 //#define SERIAL_VERBOSE
@@ -39,7 +39,7 @@ static uint8_t *ucBackBuffer = NULL;
 #define hornPin 4
 #define relayPin 3
 #define pulse_in_pin 2
-#define button_in_pin 1  //changing this breaks thing??? why????
+#define button_in_pin 1 
 #define analog_pin 0
 #endif
 
@@ -193,7 +193,7 @@ uint16_t output_pulse_ms = 200;
 uint16_t output_pulse_off_ms = 200;
 uint16_t units_per_event = 10;
 uint16_t output_pulses_per_trigger = 1;
-uint16_t output_pulses_for_prime = 0;
+uint16_t output_pulses_for_prime = 10; ///
 uint16_t min_flow = 0;
 uint16_t analog_threshold = 0;
 uint16_t analog_map_min = 0;
@@ -594,7 +594,6 @@ void oneMinute() {
 }
 
 void oneSecond() {
-
   flow_rate = ISR_flowrate_pulses - (ISR_flowrate_pulses / 11);
   flow_rate = (flow_rate * flowRate_seconds) / sensor_pulses_per_unit;  // calculate in units per <time in seconds>
 
@@ -605,11 +604,9 @@ void oneSecond() {
 
 
 void oneHundred_ms() {
-
-  uint16_t rawData = getInputs(ten_ms_heartbeat);                           // collect sensor input based on pin_mode
+  uint16_t rawData = getInputs(ten_ms_heartbeat);                         // collect sensor input based on pin_mode
   uint16_t units_to_process = processRawPulses(rawData, ten_ms_heartbeat);  // process sensor input
   units_queued = processActions(units_to_process, ten_ms_heartbeat);        // process units based on mode
-
   checkButton();
   analog_sense = getAnalog();
   syncModbusData();
