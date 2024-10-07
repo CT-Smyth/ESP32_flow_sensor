@@ -23,6 +23,11 @@ Pretty rough but robust and reliable - Ill work on cleaning it up for readabilit
 // button wakes display & cycles through display modes. 1 sec saves data and 
 // sends manpage to serial. 10 seconds runs priming pulses, 15 seconds for reset with portal for config and OTA.
 
+// double reset (or action button on boot) for portal:
+// to force the config portal reset the unit within 10 seconds after the 5 quick status flashes on startup.
+// the system will restart with the LED on for a couple of seconds to show that the portal has been started, 
+// then normal operation will start (non-blocking portal remains active)
+
 // Must be compiled with "minimal spiffs" for OTA to work
 
 
@@ -31,8 +36,7 @@ Included node-red configurator tool with examples on how to interface modbus to 
 
 to get going - read the main .ino and modify the code for your platform (pins etc) as needed
 
-boots up into AP mode if no wifi credentials found.
-connect to built in wifi and go to 192.168.4.1 to set up wifi, get IP address, hostname, etc
+connect to portal (192.168.4.1) to set up wifi, get IP address, hostname, etc
 
 See the node-red example to interface with the unit.
 
