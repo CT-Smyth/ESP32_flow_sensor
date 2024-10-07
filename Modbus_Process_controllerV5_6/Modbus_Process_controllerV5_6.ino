@@ -13,8 +13,8 @@
 #define DOUBLE_RESET_TIME 10  //sec
 
 
-//#define C3_42_OLED  // enable this if you're using the .42" oled and not the standard .96" or 1.3"
-#define WEMOS_MINI_32  //S3 with generic 128x64 OLED
+#define C3_42_OLED  // enable this if you're using the .42" oled and not the standard .96" or 1.3"
+//#define WEMOS_MINI_32  //S3 with generic 128x64 OLED
 //#define S2_mini with generic 128x64 OLED (pins not yet complete)
 
 //#define SERIAL_VERBOSE
@@ -184,7 +184,7 @@ uint16_t units_since_boot = 0;
 uint16_t mode = 1;
 uint16_t pin_mode = 0;
 uint16_t sensor_pulses_per_unit = 150;
-uint16_t save_interval = 100;
+uint16_t save_interval = 1000;
 uint16_t horn_units = 0;
 uint16_t relay_units = 0;
 uint16_t horn_seconds = 0;
@@ -195,7 +195,7 @@ uint16_t horn_latchmode = 0;
 uint16_t output_pulse_ms = 200;
 uint16_t output_pulse_off_ms = 200;
 uint16_t units_per_event = 10;
-uint16_t output_pulses_per_trigger = 1;
+uint16_t output_pulses_per_trigger = 0;
 uint16_t output_pulses_for_prime = 10;  ///
 uint16_t min_flow = 0;
 uint16_t analog_threshold = 0;
@@ -204,6 +204,7 @@ uint16_t analog_map_max = 4095;  // set to reflect raw data / 10 by default
 uint16_t analog_range_min = 0;
 uint16_t analog_range_max = 4095;
 uint16_t flowRate_seconds = 60;  // for units per minute
+
 
 //misc things to store in flash:
 uint16_t valid_flash;
