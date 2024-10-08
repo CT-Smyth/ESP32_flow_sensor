@@ -16,16 +16,16 @@
 // web portal at 192.168.4.1 if no wifi. 
 // if connected to an AP, portal at above or at IP or at esp32-xxxxxx.local
 
-// button wakes display & cycles through display modes. 1 sec saves data and 
-// sends manpage to serial. 10 seconds runs priming pulses, 15 seconds for reset.
-
 // double reset for portal:
 // to force the config portal reset the unit within 10 seconds after the 5 quick status flashes on startup.
 // the system will restart with the LED on for a couple of seconds to show that the portal has been started, 
 // then normal operation will start (non-blocking portal remains active)
 
-// you can cycle through default display modes by repeating the double reset sequence until the desired screen 
-// is displayed
+// cycle through default display modes by using the action button (0/boot button on some devices)
+// or by repeating the double reset sequence until the desired screen is displayed.
+
+// button wakes display & cycles through display modes. 1 sec saves data and 
+// sends manpage to serial. 10 seconds runs priming pulses, 30 seconds for reset.
 
 //connect to portal (192.168.4.1) to set up wifi, get IP address, hostname, etc
 

@@ -12,8 +12,8 @@
 #define WDT_TIMEOUT 30        //sec
 #define DOUBLE_RESET_TIME 10  //sec
 
-#define C3_42_OLED  // enable this if you're using the .42" oled and not the standard .96" or 1.3"
-//#define WEMOS_MINI_32  //S3 with generic 128x64 OLED
+//#define C3_42_OLED  // enable this if you're using the .42" oled and not the standard .96" or 1.3"
+#define WEMOS_MINI_32  //S3 with generic 128x64 OLED
 //#define S2_mini with generic 128x64 OLED (pins not yet complete)
 
 //#define SERIAL_VERBOSE
@@ -36,18 +36,16 @@ static uint8_t *ucBackBuffer = NULL;
 //pin definitions
 #ifdef C3_42_OLED
 #define ledOn 0
-
 #define ledPin 8
 #define hornPin 4
 #define relayPin 3
 #define pulse_in_pin 2
-#define button_in_pin 1
-#define analog_pin 0
+#define button_in_pin 9
+#define analog_pin 1
 #endif
 
 #ifdef WEMOS_MINI_32
 #define ledOn 1
-
 #define ledPin LED_BUILTIN
 #define hornPin 4
 #define relayPin 0
@@ -58,7 +56,12 @@ static uint8_t *ucBackBuffer = NULL;
 
 #ifdef S2_mini
 #define ledOn 1
-//#define ledPin 15  // ESP32-S2-mini
+#define ledPin 15  // ESP32-S2 lolin s2 mini
+#define hornPin 4
+#define relayPin 3
+#define pulse_in_pin 2
+#define button_in_pin 0
+#define analog_pin 1
 #endif
 
 //one bit display driver configuration
@@ -73,7 +76,8 @@ static uint8_t *ucBackBuffer = NULL;
 #endif
 
 #ifdef S2_mini
-//I2C here
+#define SDA_PIN 33  // Use -1 for the Wire library default pins
+#define SCL_PIN 35  // Use -1 for the Wire library default pins
 #endif
 
 #define RESET_PIN -1  //disabled

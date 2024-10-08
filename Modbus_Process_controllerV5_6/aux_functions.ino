@@ -282,8 +282,9 @@ void manPage() {
   Serial.print("\n---------------------------------------------------------------------------------------");
   Serial.print("\n\nListens for modbus on port 502 - Slave ID not important");
   Serial.print("\n\nRegister <numbers> are given as ZERO REFERENCED offsets to zero");
-  Serial.print("\n\nbutton wakes display & cycles through display modes. 1 sec saves data and sends");
-  Serial.print("\nthis page to serial. 10 seconds runs pulses_for_prime job, 15 seconds for reset.");
+  Serial.print("\n\naction button (0/boot button on some devices) wakes display & cycles through display");
+  Serial.print("\nmodes. 1 sec saves data 10 seconds runs pulses_for_prime job, 30 seconds for reset.");
+  Serial.print("\npressing button during boot startup (not holding during reset) launches config portal");
   Serial.print("\n---------------------------------------------------------------------------------------");
   Serial.print("\nMAC Address, IP and Hostname: ");
   Serial.print(WiFi.macAddress());
