@@ -52,6 +52,7 @@ int senseButton() {
       if (display_mode > 4) {
         display_mode = 0;
       }
+      default_display_mode = display_mode;
       displayTime = millis() + (displayTimeout * 1000);
     }
 
