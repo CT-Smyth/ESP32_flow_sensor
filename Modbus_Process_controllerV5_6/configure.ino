@@ -342,7 +342,7 @@ void config_and_init() {
 
     wm.setConfigPortalBlocking(false);
     wm.setConfigPortalTimeout(300);
-    wm.startConfigPortal();
+    wm.startConfigPortal(WiFi.getHostname(), "configureMe!"); //place credentials here.
 
     delay(10000);
   } else {
