@@ -12,8 +12,8 @@
 #define WDT_TIMEOUT 30        //sec
 #define DOUBLE_RESET_TIME 10  //sec
 
-#define C3_42_OLED  // enable this if you're using the .42" oled and not the standard .96" or 1.3"
-//#define WEMOS_MINI_32  //S3 with generic 128x64 OLED
+//#define C3_42_OLED  // enable this if you're using the .42" oled and not the standard .96" or 1.3"
+#define WEMOS_MINI_32  //S3 with generic 128x64 OLED
 //#define S2_mini with generic 128x64 OLED (pins not yet complete)
 
 //#define SERIAL_VERBOSE
