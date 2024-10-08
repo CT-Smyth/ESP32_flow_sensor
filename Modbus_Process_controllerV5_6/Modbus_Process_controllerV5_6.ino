@@ -210,7 +210,8 @@ uint16_t relay_status;
 uint16_t oneSecondTimer = 0;
 uint16_t oneHundred_msTimer = 0;
 uint16_t oneMinuteTimer = 0;
-uint16_t double_reset_timer = 0;
+uint16_t doubleResetTimer = 0;
+uint16_t displayTimeout = 300; //5 minutes
 
 u_long buttonTime;
 u_long PulseInTime;
@@ -600,10 +601,10 @@ void oneSecond() {
   ISR_flowrate_pulses = 0;
   esp_task_wdt_reset();
 
-  if (double_reset_timer <= (DOUBLE_RESET_TIME + 1)) {
-    double_reset_timer++;
+  if (doubleResetTimer <= (DOUBLE_RESET_TIME + 1)) {
+    doubleResetTimer++;
   }
-  if (double_reset_timer == DOUBLE_RESET_TIME) {
+  if (doubleResetTimer == DOUBLE_RESET_TIME) {
     boot_mode = 0;
     saveBootMode();
     Serial.println("Double reset detection timeout. boot mode set to zero");

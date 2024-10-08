@@ -89,7 +89,7 @@
 //  OUTPUT_PULSES_TO_ADD    <0>-      (write only). output pulses to add to current job 
 //  UNITS_SINCE_BOOT        <1>-                 write to ADD UNITS to total or zero-->  
 //  FLOW_TIME_SINCE_BOOT    <2>-                 write to ADD UNITS to total or zero-->
-//  SHOW_DISPLAY            <3>-                 minutes (120 max) to enable display-->
+//  SHOW_DISPLAY            <3>-                minutes (1000 max) to enable display-->
 //  DISPLAY_MODE            <3>-        set 0-4 (4 is off) for deafault display mode-->     
 //  ---------------------The below settings will be saved on setting---------------------- 
 //  MODE                    <9>-                                      Operating Mode-->  

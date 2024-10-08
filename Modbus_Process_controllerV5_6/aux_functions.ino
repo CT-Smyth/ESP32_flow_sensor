@@ -52,7 +52,7 @@ int senseButton() {
       if (display_mode > 4) {
         display_mode = 0;
       }
-      displayTime = millis() + 300000;
+      displayTime = millis() + (displayTimeout * 1000);
     }
 
     return (int((millis() - buttonTime) / 1000));
@@ -344,13 +344,13 @@ void manPage() {
   Serial.print("\n\---------------------------------------------------------------------------------------");
 
   Serial.print("\n\nHREGS:             <HREG Number> (offset 0 )");
-  Serial.print("\nOUTPUT_PULSES_TO_ADD    <0>-output pulses to add to current job");
+  Serial.print("\nOUTPUT_PULSES_TO_ADD    <0>-  output pulses to add to current job");
   Serial.print("\nUNITS_SINCE_BOOT        <1>-                 write to ADD UNITS to total or zero--> ");
   Serial.print(units_since_boot);
   Serial.print("\nFLOW_TIME_SINCE_BOOT    <2>-                 write to ADD UNITS to total or zero--> ");
   Serial.print(flow_time_since_boot);
-  Serial.print("\nSHOW_DISPLAY            <3>-minutes (120 max) to enable display ");
-  Serial.print("\nDISPLAY_MODE            <3>-set 0-4 (4 is off) for deafault display mode ");
+  Serial.print("\nSHOW_DISPLAY            <3>-  minutes (1000 max) to enable display ");
+  Serial.print("\nDISPLAY_MODE            <3>-  set 0-4 (4 is off) for deafault display mode ");
   Serial.print("\n\n\n---------------------The below settings will be saved on setting----------------------");
   Serial.print("\nMODE                    <9>-                                      Operating Mode--> ");
   Serial.print(mode);

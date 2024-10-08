@@ -234,10 +234,11 @@ uint16_t get_FLOW_TIME_SINCE_BOOT_callback(TRegister* reg, uint16_t val) {
 }
 
 uint16_t set_SHOW_DISPLAY_callback(TRegister* reg, uint16_t val) {
-  if (val > 120){
-    val = 120;
+  if (val > 1000){
+    val = 1000;
   }
-  displayTime = millis() + u_long(val * 60000);
+  displayTimeout = (val * 60);
+  displayTime = millis() + u_long(displayTimeout * 1000);
   return val;
 }
 uint16_t get_SHOW_DISPLAY_callback(TRegister* reg, uint16_t val) {
