@@ -295,7 +295,7 @@ void config_and_init() {
   obdWriteString(&oled, 0, 30, 32, (char *)"TO SET WIFI", FONT_6x8, OBD_BLACK, 1);
   obdWriteString(&oled, 0, 30, 40, (char *)"OR OTA UPDT", FONT_6x8, OBD_BLACK, 1);
 #else
-  obdWriteString(&oled, 0, 0, 0, (char *)"  v5.5", FONT_8x8, OBD_BLACK, 1);
+  obdWriteString(&oled, 0, 0, 0, (char *)"  v5.6", FONT_8x8, OBD_BLACK, 1);
   obdWriteString(&oled, 0, 0, 8, (char *)" HOLD BUTTON", FONT_6x8, OBD_BLACK, 1);
   obdWriteString(&oled, 0, 0, 24, (char *)" TO SET WIFI", FONT_6x8, OBD_BLACK, 1);
   obdWriteString(&oled, 0, 0, 40, (char *)"OR OTA UPDATE", FONT_6x8, OBD_BLACK, 1);
