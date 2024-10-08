@@ -25,7 +25,7 @@
 // or by repeating the double reset sequence until the desired screen is displayed.
 
 // button wakes display & cycles through display modes. 1 sec saves data and 
-// sends manpage to serial. 10 seconds runs priming pulses, 30 seconds for reset.
+// sends manpage to serial. 10 seconds runs priming pulses, 30 seconds for erase wifi and reset.
 
 //connect to portal (192.168.4.1) to set up wifi, get IP address, hostname, etc
 

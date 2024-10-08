@@ -78,9 +78,10 @@ void checkButton() {
     output_pulses_todo = output_pulses_for_prime;
   }
   if (buttonSeconds == 30) {
-    Serial.println("RESET TYPE 0 - SAVE & RESTART ONLY");
+    Serial.println("RESET TYPE 3 - SAVE, ERASE WIFI, RESTART ONLY");
     saveData();
-    ESP.restart();  //reset ESP32
+    esp_wifi_restore();  // clear wifi credentials
+    ESP.restart();       //reset ESP32
   }
 }
 
@@ -283,7 +284,7 @@ void manPage() {
   Serial.print("\n\nListens for modbus on port 502 - Slave ID not important");
   Serial.print("\n\nRegister <numbers> are given as ZERO REFERENCED offsets to zero");
   Serial.print("\n\naction button (0/boot button on some devices) wakes display & cycles through display");
-  Serial.print("\nmodes. 1 sec saves data 10 seconds runs pulses_for_prime job, 30 seconds for reset.");
+  Serial.print("\nmodes. 1 sec save data, 10 sec runs pulses_for_prime job, 30 sec for del wifi and reset.");
   Serial.print("\npressing button during boot startup (not holding during reset) launches config portal");
   Serial.print("\n---------------------------------------------------------------------------------------");
   Serial.print("\nMAC Address, IP and Hostname: ");
