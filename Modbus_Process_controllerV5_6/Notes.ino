@@ -1,4 +1,4 @@
-//TODO make multi-reset capability to change default display mode
+//TODO check time accuracy
 
 
 // ESP32 based process controller.
@@ -23,6 +23,9 @@
 // to force the config portal reset the unit within 10 seconds after the 5 quick status flashes on startup.
 // the system will restart with the LED on for a couple of seconds to show that the portal has been started, 
 // then normal operation will start (non-blocking portal remains active)
+
+// you can cycle through default display modes by repeating the double reset sequence until the desired screen 
+// is displayed
 
 //connect to portal (192.168.4.1) to set up wifi, get IP address, hostname, etc
 
@@ -141,10 +144,7 @@
 //  WIFI_RSSI               <11>-                                            -->  
 //  UPTIME_HRS              <12>-                                            -->    
 
-
 //    --------------------------------------------------------------------------------------- 
-
-
 
 // //COILs
 // const int HORN_COIL = 0;
@@ -168,11 +168,15 @@
 // const int SENSOR_PULSES = 8;
 // const int ANALOG_SENSE = 9;
 // const int UNITS_QUEUED = 10;
+// const int WIFI_RSSI = 11;
+// const int UPTIME_HRS = 12;
 
 // //HREGs
 // const int OUTPUT_PULSES_TO_ADD = 0;
 // const int UNITS_SINCE_BOOT = 1;
 // const int FLOW_TIME_SINCE_BOOT = 2;
+// const int SHOW_DISPLAY = 3;  //show display for n minutes (max 120)
+// const int DISPLAY_MODE = 4; 
 // const int RESET_HREG = 99;
 // //Parameters to save: these values loaded from flash
 // const int MODE = 9;
@@ -222,19 +226,19 @@
 // uint16_t mode = 1;
 // uint16_t pin_mode = 0;
 // uint16_t sensor_pulses_per_unit = 150;
-// uint16_t save_interval = 10;
-// uint16_t horn_units = 100;
-// uint16_t relay_units = 200;
-// uint16_t horn_seconds = 300;
-// uint16_t relay_seconds = 600;
+// uint16_t save_interval = 1000;
+// uint16_t horn_units = 0;
+// uint16_t relay_units = 0;
+// uint16_t horn_seconds = 0;
+// uint16_t relay_seconds = 0;
 // uint16_t flow_stop_seconds = 5;
 // uint16_t relay_latchmode = 0;
 // uint16_t horn_latchmode = 0;
 // uint16_t output_pulse_ms = 200;
 // uint16_t output_pulse_off_ms = 200;
 // uint16_t units_per_event = 10;
-// uint16_t output_pulses_per_trigger = 1;
-// uint16_t output_pulses_for_prime = 10;
+// uint16_t output_pulses_per_trigger = 0;
+// uint16_t output_pulses_for_prime = 10;  ///
 // uint16_t min_flow = 0;
 // uint16_t analog_threshold = 0;
 // uint16_t analog_map_min = 0;
@@ -242,7 +246,6 @@
 // uint16_t analog_range_min = 0;
 // uint16_t analog_range_max = 4095;
 // uint16_t flowRate_seconds = 60;  // for units per minute
-// uint16_t decimals = 1;           // for 1/10 units
 
 // //misc things to store in flash:
 // uint16_t valid_flash;
@@ -250,7 +253,42 @@
 // uint16_t lifetime_units_from_flash_LSW;
 // uint16_t boot_mode = 0;
 
+// uint16_t horn_status;
+// uint16_t relay_status;
+// uint16_t oneSecondTimer = 0;
+// uint16_t oneHundred_msTimer = 0;
+// uint16_t oneMinuteTimer = 0;
+// uint16_t double_reset_timer = 0;
 
+// u_long buttonTime;
+// u_long PulseInTime;
+// u_long ten_ms_heartbeat;
+// u_long PulseTime;
+// u_long total_flow_time_at_start;
+// u_long flowResetTime;
+// u_long rawPulseTime;
+// u_long last_save;
+// u_long blink;
+// u_long displayTime;  //display on for 10 min
+// u_long flashRate;
+
+// uint8_t display_mode = 0;
+// uint8_t default_display_mode = 0;
+// uint8_t textScroll = 0;
+
+// int buttonSeconds;
+
+// bool pulse_on_in_progress = false;
+// bool pulse_off_in_progress = false;
+// bool call_for_pulse = false;
+// bool active_pulse_train = false;
+// bool active_flow = false;
+// bool system_initialized = false;
+// bool horn_set_by_modbus = false;
+// bool relay_set_by_modbus = false;
+// bool cycle_state = false;
+// bool button_state = false;
+// bool animation = false;
 
 //---------------------------modbus API reference:----------------------------
 

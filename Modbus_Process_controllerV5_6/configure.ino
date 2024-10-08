@@ -357,8 +357,14 @@ void config_and_init() {
     }
   }
 
-  boot_mode = 1;  // set boot to portal flag in case of double reset  - it will be cleared after DOUBLE_RESET_TIME
+  boot_mode = boot_mode + 1;  // set boot-to-portal flag in case of double reset  - it will be cleared after DOUBLE_RESET_TIME
   saveBootMode();
   manPage();
   Serial.println("Initialization complete.");
+  if (boot_mode > 2) {  // second or subsequent double reset
+    default_display_mode++;
+    if (default_display_mode > 3) default_display_mode = 0;
+    display_mode = default_display_mode;
+    saveSettings();
+  }
 }

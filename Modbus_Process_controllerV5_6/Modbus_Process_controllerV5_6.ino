@@ -12,7 +12,6 @@
 #define WDT_TIMEOUT 30        //sec
 #define DOUBLE_RESET_TIME 10  //sec
 
-
 #define C3_42_OLED  // enable this if you're using the .42" oled and not the standard .96" or 1.3"
 //#define WEMOS_MINI_32  //S3 with generic 128x64 OLED
 //#define S2_mini with generic 128x64 OLED (pins not yet complete)
@@ -102,7 +101,6 @@ IPAddress primaryDNS(192, 168, 3, 1);  // (optional)
 IPAddress secondaryDNS(0, 0, 0, 0);
 #endif
 
-
 //COILs
 const int HORN_COIL = 0;
 const int RELAY_COIL = 1;
@@ -114,20 +112,17 @@ const int SAVE_COIL = 10;
 //IREGs
 const int LIFETIME_UNITS_MSW = 0;
 const int LIFETIME_UNITS_LSW = 1;
-
 const int THIS_FLOW_UNITS = 2;
 const int THIS_FLOW_DURATION = 3;
 const int LARGEST_FLOW_UNITS = 4;
 const int LONGEST_FLOW_DURATION = 5;
 const int FLOW_RATE = 6;
-
 const int OUTPUT_PULSES_TODO = 7;
 const int SENSOR_PULSES = 8;
 const int ANALOG_SENSE = 9;
 const int UNITS_QUEUED = 10;
 const int WIFI_RSSI = 11;
 const int UPTIME_HRS = 12;
-
 
 //HREGs
 const int OUTPUT_PULSES_TO_ADD = 0;
@@ -176,7 +171,6 @@ volatile u_long ISR_flowrate_pulses;  //used in ISR
 uint16_t sensor_pulses;
 uint16_t analog_sense = 2000;
 uint16_t units_queued;
-
 uint16_t flow_time_since_boot = 0;
 uint16_t units_since_boot = 0;
 
@@ -204,7 +198,6 @@ uint16_t analog_map_max = 4095;  // set to reflect raw data / 10 by default
 uint16_t analog_range_min = 0;
 uint16_t analog_range_max = 4095;
 uint16_t flowRate_seconds = 60;  // for units per minute
-
 
 //misc things to store in flash:
 uint16_t valid_flash;
