@@ -107,6 +107,7 @@ uint output_pulser() {
       pulse_on_in_progress = false;
       pulse_off_in_progress = false;
       output_pulses_todo = output_pulses_todo - 1;
+      output_pulses++;
     }
 
     //Serial.print("\npulses to do : ");
@@ -238,6 +239,7 @@ void resetData() {  //reset data only
   units_queued = 0;
   flow_time_since_boot = 0;
   units_since_boot = 0;
+  output_pulses = 0;
 
   saveData();
   syncModbusData();

@@ -1,7 +1,59 @@
 //Modbus callbacks and functions
+void syncModbusData() {
+  uint16_t uptime = millis() / 3600000;  //uptime hours
+  uint16_t rssi_db = abs(WiFi.RSSI());
+  //IREGs
+  mBus.Ireg(LIFETIME_UNITS_LSW, lifetime_units_LSW);
+  mBus.Ireg(LIFETIME_UNITS_MSW, lifetime_units_MSW);
+  mBus.Ireg(THIS_FLOW_UNITS, this_flow_units);
+  mBus.Ireg(THIS_FLOW_DURATION, this_flow_duration);
+  mBus.Ireg(LARGEST_FLOW_UNITS, largest_flow_units);
+  mBus.Ireg(LONGEST_FLOW_DURATION, longest_flow_duration);
+  mBus.Ireg(FLOW_RATE, flow_rate);
+  mBus.Ireg(OUTPUT_PULSES_TODO, output_pulses_todo);
+  mBus.Ireg(SENSOR_PULSES, sensor_pulses);
+  mBus.Ireg(ANALOG_SENSE, analog_sense);
+  mBus.Ireg(UNITS_QUEUED, units_queued);
+  mBus.Ireg(UPTIME_HRS, uptime);
+  mBus.Ireg(WIFI_RSSI, rssi_db);
+  mBus.Ireg(OUTPUT_PULSES, output_pulses);
 
-void setupModbus(){
-   //MODBUS SETUP
+  //HREGs
+  mBus.Hreg(UNITS_SINCE_BOOT, units_since_boot);
+  mBus.Hreg(FLOW_TIME_SINCE_BOOT, flow_time_since_boot);
+}
+
+void syncModbusSettings() {
+  mBus.Hreg(MODE, mode);
+  mBus.Hreg(PIN_MODE, pin_mode);
+  mBus.Hreg(SENSOR_PULSES_PER_UNIT, sensor_pulses_per_unit);
+  mBus.Hreg(SAVE_INTERVAL, save_interval);
+  mBus.Hreg(HORN_UNITS, horn_units);
+  mBus.Hreg(RELAY_UNITS, relay_units);
+  mBus.Hreg(HORN_SECONDS, horn_seconds);
+  mBus.Hreg(RELAY_SECONDS, relay_seconds);
+  mBus.Hreg(FLOW_STOP_SECONDS, flow_stop_seconds);
+  mBus.Hreg(RELAY_LATCHMODE, relay_latchmode);
+  mBus.Hreg(HORN_LATCHMODE, horn_latchmode);
+  mBus.Hreg(OUTPUT_PULSE_MS, output_pulse_ms);
+  mBus.Hreg(OUTPUT_PULSE_OFF_MS, output_pulse_off_ms);
+  mBus.Hreg(UNITS_PER_EVENT, units_per_event);
+  mBus.Hreg(OUTPUT_PULSES_PER_TRIGGER, output_pulses_per_trigger);
+  mBus.Hreg(OUTPUT_PULSES_FOR_PRIME, output_pulses_for_prime);
+  mBus.Hreg(MIN_FLOW, min_flow);
+  mBus.Hreg(ANALOG_THRESHOLD, analog_threshold);
+  mBus.Hreg(ANALOG_MAP_MIN, analog_map_min);
+  mBus.Hreg(ANALOG_MAP_MAX, analog_map_max);
+  mBus.Hreg(ANALOG_RANGE_MIN, analog_range_min);
+  mBus.Hreg(ANALOG_RANGE_MAX, analog_range_max);
+  mBus.Hreg(FLOWRATE_SECONDS, flowRate_seconds);
+
+  mBus.task();
+}
+
+
+void setupModbus() {
+  //MODBUS SETUP
   mBus.onConnect(connect_callback);  // Add callback on connection event. must return 1 to allow connection
   mBus.server();
 
@@ -70,6 +122,9 @@ void setupModbus(){
 
   mBus.addIreg(WIFI_RSSI, 0);
   mBus.onGetIreg(WIFI_RSSI, get_WIFI_RSSI_callback);
+
+  mBus.addIreg(OUTPUT_PULSES, 0);
+  mBus.onGetIreg(OUTPUT_PULSES, get_OUTPUT_PULSES_callback);
 
 
   //HREGs
@@ -194,56 +249,7 @@ void setupModbus(){
   mBus.onGetHreg(RESET_HREG, get_RESET_callback);
 }
 
-void syncModbusData() {
-  uint16_t uptime = millis() / 3600000;  //uptime hours
-  uint16_t rssi_db = abs(WiFi.RSSI());
-  mBus.Ireg(LIFETIME_UNITS_LSW, lifetime_units_LSW);
-  mBus.Ireg(LIFETIME_UNITS_MSW, lifetime_units_MSW);
-  mBus.Ireg(THIS_FLOW_UNITS, this_flow_units);
-  mBus.Ireg(THIS_FLOW_DURATION, this_flow_duration);
-  mBus.Ireg(LARGEST_FLOW_UNITS, largest_flow_units);
-  mBus.Ireg(LONGEST_FLOW_DURATION, longest_flow_duration);
-  mBus.Ireg(FLOW_RATE, flow_rate);
-  mBus.Ireg(OUTPUT_PULSES_TODO, output_pulses_todo);
-  mBus.Ireg(SENSOR_PULSES, sensor_pulses);
-  mBus.Ireg(ANALOG_SENSE, analog_sense);
-  mBus.Ireg(UNITS_QUEUED, units_queued);
-  mBus.Ireg(UPTIME_HRS, uptime);
-  mBus.Ireg(WIFI_RSSI, rssi_db);
 
-  mBus.Hreg(UNITS_SINCE_BOOT, units_since_boot);
-  mBus.Hreg(FLOW_TIME_SINCE_BOOT, flow_time_since_boot);
-  
-
-}
-
-void syncModbusSettings() {
-  mBus.Hreg(MODE, mode);
-  mBus.Hreg(PIN_MODE, pin_mode);
-  mBus.Hreg(SENSOR_PULSES_PER_UNIT, sensor_pulses_per_unit);
-  mBus.Hreg(SAVE_INTERVAL, save_interval);
-  mBus.Hreg(HORN_UNITS, horn_units);
-  mBus.Hreg(RELAY_UNITS, relay_units);
-  mBus.Hreg(HORN_SECONDS, horn_seconds);
-  mBus.Hreg(RELAY_SECONDS, relay_seconds);
-  mBus.Hreg(FLOW_STOP_SECONDS, flow_stop_seconds);
-  mBus.Hreg(RELAY_LATCHMODE, relay_latchmode);
-  mBus.Hreg(HORN_LATCHMODE, horn_latchmode);
-  mBus.Hreg(OUTPUT_PULSE_MS, output_pulse_ms);
-  mBus.Hreg(OUTPUT_PULSE_OFF_MS, output_pulse_off_ms);
-  mBus.Hreg(UNITS_PER_EVENT, units_per_event);
-  mBus.Hreg(OUTPUT_PULSES_PER_TRIGGER, output_pulses_per_trigger);
-  mBus.Hreg(OUTPUT_PULSES_FOR_PRIME, output_pulses_for_prime);
-  mBus.Hreg(MIN_FLOW, min_flow);
-  mBus.Hreg(ANALOG_THRESHOLD, analog_threshold);
-  mBus.Hreg(ANALOG_MAP_MIN, analog_map_min);
-  mBus.Hreg(ANALOG_MAP_MAX, analog_map_max);
-  mBus.Hreg(ANALOG_RANGE_MIN, analog_range_min);
-  mBus.Hreg(ANALOG_RANGE_MAX, analog_range_max);
-  mBus.Hreg(FLOWRATE_SECONDS, flowRate_seconds);
-
-  mBus.task();
-}
 
 bool connect_callback(IPAddress ip) {
   Serial.print("Modbus connected from: ");
@@ -391,6 +397,13 @@ uint16_t get_WIFI_RSSI_callback(TRegister* reg, uint16_t val) {
   return val;
 }
 
+uint16_t get_OUTPUT_PULSES_callback(TRegister* reg, uint16_t val) {
+  //Serial.print("value = ");
+  //Serial.println(val);
+  return val;
+}
+
+
 
 //Hreg Callbacks
 uint16_t set_OUTPUT_PULSES_TO_ADD_callback(TRegister* reg, uint16_t val) {
@@ -430,7 +443,7 @@ uint16_t get_FLOW_TIME_SINCE_BOOT_callback(TRegister* reg, uint16_t val) {
 }
 
 uint16_t set_SHOW_DISPLAY_callback(TRegister* reg, uint16_t val) {
-  if (val > 1000){
+  if (val > 1000) {
     val = 1000;
   }
   displayTimeout = (val * 60);
@@ -444,7 +457,7 @@ uint16_t get_SHOW_DISPLAY_callback(TRegister* reg, uint16_t val) {
 }
 
 uint16_t set_DISPLAY_MODE_callback(TRegister* reg, uint16_t val) {
-  if (val > 4){
+  if (val > 4) {
     val = 4;
   }
   default_display_mode = val;

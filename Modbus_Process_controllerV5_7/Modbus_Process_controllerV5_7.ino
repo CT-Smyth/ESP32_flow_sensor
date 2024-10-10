@@ -130,6 +130,7 @@ const int ANALOG_SENSE = 9;
 const int UNITS_QUEUED = 10;
 const int WIFI_RSSI = 11;
 const int UPTIME_HRS = 12;
+const int OUTPUT_PULSES = 13;
 
 //HREGs
 const int OUTPUT_PULSES_TO_ADD = 0;
@@ -180,6 +181,7 @@ uint16_t analog_sense = 2000;
 uint16_t units_queued;
 uint16_t flow_time_since_boot = 0;
 uint16_t units_since_boot = 0;
+uint16_t output_pulses;
 
 // Settings variables (save on write from modbus):
 uint16_t mode = 1;
