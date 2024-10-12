@@ -14,7 +14,7 @@
 // Listens for modbus on port 502 - Slave ID not important
 // HOST_NAME = "esp32-xxxxxx";  //set hostname to <hostname>.local
 // web portal at 192.168.4.1 if no wifi. 
-// if connected to an AP, portal at above or at IP or at esp32-xxxxxx.local
+// if connected to an AP, portal at above or at IP or at esp32-xxxxxx.local.  local wifi password is configureMe!
 
 // double reset for portal:
 // to force the config portal reset the unit within 10 seconds after the 5 quick status flashes on startup.

@@ -67,7 +67,8 @@ void loadData() {
   largest_flow_units = keystore.getUShort("l_flow_units", 0);
   longest_flow_duration = keystore.getUShort("l_flow_dur", 0);
   lifetime_units_MSW = keystore.getUShort("l_units_MSW", 0);
-  lifetime_units_LSW = keystore.getUShort("l_units_LSW", 0);
+  lifetime_units_LSW = keystore.getUShort("l_units_LSW", 0);  
+  output_pulses = keystore.getUShort("output_pulses", 0);  
   last_save = keystore.getULong("last_save");
   keystore.end();
 

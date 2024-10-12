@@ -14,15 +14,15 @@
 #define WDT_TIMEOUT 30        //sec
 #define DOUBLE_RESET_TIME 10  //sec
 
-#define C3_42_OLED  // enable this if you're using the .42" oled and not the standard .96" or 1.3"
+//#define C3_42_OLED  // enable this if you're using the .42" oled and not the standard .96" or 1.3"
 //#define WEMOS_MINI_32  //S3 D1 Mini with generic 128x64 OLED
-//#define S2_mini with generic 128x64 OLED (pins not yet complete)
+#define S2_mini  // WEMOS s2 mini
 
 //#define SERIAL_VERBOSE
 #define USE_MODBUS
 
 // remark out MY_OLED for Non - LED deployment
-#define MY_OLED OLED_128x64  //72x40 displays in center of 128x64 field
+//#define MY_OLED OLED_128x64  //72x40 displays in center of 128x64 field
 #define OLED_WIDTH 128
 #define OLED_HEIGHT 64
 
@@ -49,7 +49,7 @@ static uint8_t *ucBackBuffer = NULL;
 
 #ifdef WEMOS_MINI_32
 #define ledOn 1
-#define ledPin LED_BUILTIN
+#define ledPin 2
 #define hornPin 4
 #define relayPin 0
 #define pulse_in_pin 18
@@ -60,9 +60,9 @@ static uint8_t *ucBackBuffer = NULL;
 #ifdef S2_mini
 #define ledOn 1
 #define ledPin 15  // ESP32-S2 lolin s2 mini
-#define hornPin 4
-#define relayPin 3
-#define pulse_in_pin 2
+#define hornPin 7
+#define relayPin 5
+#define pulse_in_pin 3
 #define button_in_pin 0
 #define analog_pin 1
 #endif
@@ -483,15 +483,15 @@ uint16_t processRawPulses(uint16_t raw_pulses, u_long millis_now) {
 // on the pulse->unit->event->pulses caclculation, and relay_units will be ignored. Latching
 // and persistance on relay is also ignored.
 
-uint16_t processActions(uint16_t units_to_process, u_long millis_now) {
+uint16_t processActions(uint16_t queued_units_to_process, u_long millis_now) {
 
   switch (mode) {
     case 0:
       //if output pulses per trigger = 0 then output is not pulsed, otherwise schedule pulses and consume inputs
       if (output_pulses_per_trigger > 0) {
-        if (units_to_process >= units_per_event) {  // Trigger an output event
+        if (queued_units_to_process >= units_per_event) {  // Trigger an output event
           //Serial.println("output pulses event triggered");
-          units_to_process = units_to_process - units_per_event;
+          queued_units_to_process = queued_units_to_process - units_per_event;
           output_pulses_todo = output_pulses_todo + output_pulses_per_trigger;
         }
       }
@@ -507,7 +507,7 @@ uint16_t processActions(uint16_t units_to_process, u_long millis_now) {
 
       if ((active_flow == 0) && (horn_status == 1) && (horn_latchmode < 2) && (horn_set_by_modbus == 0)) {  // if horn is on and flow stops
         setHorn(0);
-        units_to_process = 0;
+        //queued_units_to_process = 0;
       }
       break;
 
@@ -523,7 +523,7 @@ uint16_t processActions(uint16_t units_to_process, u_long millis_now) {
 
       if ((active_flow == 0) && (relay_status == 1) && (relay_latchmode < 2) && (relay_set_by_modbus == 0)) {  // if relay is on and flow stops
         setRelay(0);
-        units_to_process = 0;
+        queued_units_to_process = 0;
       }
 
       if ((horn_units > 0) && (this_flow_units >= horn_units) && (active_flow == 1) && (horn_status == 0)) {  // Trigger an output event
@@ -537,34 +537,34 @@ uint16_t processActions(uint16_t units_to_process, u_long millis_now) {
 
       if ((active_flow == 0) && (horn_status == 1) && (horn_latchmode < 2) && (horn_set_by_modbus == 0)) {  // if horn is on and flow stops
         setHorn(0);
-        units_to_process = 0;
+        queued_units_to_process = 0;
       }
       break;
 
     case 2:
-      units_to_process = 0;
+      queued_units_to_process = 0;
       if ((relay_seconds > 0) && (flow_time_since_boot >= relay_seconds) && (active_flow == 1) && (relay_status == 0)) {
         setRelay(1);
       }
       if ((horn_seconds > 0) && (flow_time_since_boot >= horn_seconds) && (active_flow == 1) && (horn_status == 0)) {
         setHorn(1);
       }
-      units_to_process = 0;
+      queued_units_to_process = 0;
       break;
 
     case 3:
-      units_to_process = 0;
+      queued_units_to_process = 0;
       if ((relay_units > 0) && (units_since_boot >= relay_units) && (active_flow == 1) && (relay_status == 0)) {
         setRelay(1);
       }
       if ((horn_units > 0) && (units_since_boot >= horn_units) && (active_flow == 1) && (horn_status == 0)) {
         setHorn(1);
       }
-      units_to_process = 0;
+      queued_units_to_process = 0;
       break;
 
     case 4:
-      units_to_process = 0;
+      queued_units_to_process = 0;
       if ((relay_seconds > 0) && (flow_time_since_boot >= relay_seconds) && (active_flow == 1) && (relay_status == 0)) {
         setRelay(1);
       }
@@ -577,22 +577,22 @@ uint16_t processActions(uint16_t units_to_process, u_long millis_now) {
       if ((horn_units > 0) && (units_since_boot >= horn_units) && (active_flow == 1) && (horn_status == 0)) {
         setHorn(1);
       }
-      units_to_process = 0;
+      queued_units_to_process = 0;
       break;
 
     case 5:
-      units_to_process = 0;
+      queued_units_to_process = 0;
       if ((relay_seconds > 0) && (this_flow_duration >= relay_seconds) && (this_flow_units < relay_units) && (active_flow == 1) && (relay_status == 0)) {
         setRelay(1);
       }
       if ((horn_seconds > 0) && (this_flow_duration >= horn_seconds) && (this_flow_units < horn_units) && (active_flow == 1) && (horn_status == 0)) {
         setHorn(1);
       }
-      units_to_process = 0;
+      queued_units_to_process = 0;
       break;
 
     default:  //just count - no control
-      units_to_process = 0;
+      queued_units_to_process = 0;
       break;
   }
 
@@ -600,17 +600,17 @@ uint16_t processActions(uint16_t units_to_process, u_long millis_now) {
   if (mode != 0) {
     if ((active_flow == 0) && (relay_status == 1) && (relay_latchmode < 2) && (relay_set_by_modbus == 0)) {  // if relay is on and flow stops
       setRelay(0);                                                                                           //
-      units_to_process = 0;
+      queued_units_to_process = 0;
     }
 
     if ((active_flow == 0) && (horn_status == 1) && (horn_latchmode < 2) && (horn_set_by_modbus == 0)) {  // if horn is on and flow stops
       setHorn(0);
-      units_to_process = 0;
+      queued_units_to_process = 0;
     }
   }
 
   checkForSave();
-  return units_to_process;
+  return queued_units_to_process;
 }
 
 
@@ -697,7 +697,7 @@ void loop() {
     wm.process();
   }
 
-  if ((blink > millis()) || (digitalRead(pulse_in_pin) != 0)) {
+  if ((blink > millis()) || ((digitalRead(pulse_in_pin) != 0) && (active_flow != 0))) {
     digitalWrite(ledPin, ledOn);
   } else {
     digitalWrite(ledPin, !ledOn);
