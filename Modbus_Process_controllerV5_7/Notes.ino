@@ -10,6 +10,7 @@
 // Supports hidden wifi, OTA updates, and massive configurability.
 
 // Pretty rough but robust and reliable - Ill work on cleaning it up for readability as i go.
+// NOTE: ESP-IDF version used ** DOES NOT WORK ON WIFI CHANNELS ABOVE 13 *** also ESP32s are 2.4ghz only
 
 // Listens for modbus on port 502 - Slave ID not important
 // HOST_NAME = "esp32-xxxxxx";  //set hostname to <hostname>.local
