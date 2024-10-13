@@ -13,7 +13,7 @@ void saveData() {
   keystore.putUShort("l_units_LSW", lifetime_units_LSW);
   keystore.putUShort("l_flow_units", largest_flow_units);
   keystore.putUShort("l_flow_dur", longest_flow_duration);
-  keystore.putULong("output_pulses", output_pulses);
+  keystore.putUShort("output_pulses", output_pulses);
   keystore.putULong("last_save", last_save);
 
   keystore.end();
