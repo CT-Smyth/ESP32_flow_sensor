@@ -1,7 +1,8 @@
 //Modbus callbacks and functions
 void syncModbusData() {
+  int8_t wifiSig = WiFi.RSSI();
   uint16_t uptime = millis() / 3600000;  //uptime hours
-  uint16_t rssi_db = int((WiFi.RSSI() * -1));
+  uint16_t rssi_db = abs(wifiSig);
 
   //IREGs
   mBus.Ireg(LIFETIME_UNITS_LSW, lifetime_units_LSW);
