@@ -91,7 +91,7 @@ void config_and_init() {
   Serial.println("Initialization complete.");
   if (boot_mode > 2) {  // second or subsequent double reset
     default_display_mode++;
-    if (default_display_mode > 3) default_display_mode = 0;
+    if (default_display_mode > 4) default_display_mode = 0;
     display_mode = default_display_mode;
     saveSettings();
   }

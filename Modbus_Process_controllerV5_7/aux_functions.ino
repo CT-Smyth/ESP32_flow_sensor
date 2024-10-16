@@ -458,6 +458,7 @@ void displayData() {
     int lftime_d = lftime / 10;
     lftime_d = lftime - (lftime_d * 10);  // get just the decimal part
     lftime = lftime / 10;                 // just get the whole part
+    int lftimeShort = lftime % 1000;
 
     int thisFl = int(this_flow_units);
     int thisFl_d = thisFl / 10;
@@ -558,7 +559,7 @@ void displayData() {
       }
     }
 
-    if (display_mode == 4) {
+    if (display_mode > 3) {
       obdFill(&oled, OBD_WHITE, 1);
     }
 
