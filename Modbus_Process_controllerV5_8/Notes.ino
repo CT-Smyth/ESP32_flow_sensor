@@ -1,4 +1,5 @@
 // ESP32 based process controller.
+// tested on pulse rates to 50KHZ with ESP32-C3  - reccomend <25KHZ max pulse rate
 
 // Especially designed for interfacing with common waterflow sensors, 0-20ma (4-20ma) level sensors, etc and controlling valve shutoffs, pumps, etc.
 // Analog, switch, and pulse input types. Controls based on levels, time, and pulses. 2 Dedicated outputs - 1 for "horn" or whatever, and one for relay and pulse output.
