@@ -14,7 +14,7 @@
 #define WDT_TIMEOUT 30        //sec
 #define DOUBLE_RESET_TIME 10  //sec
 
-#define C3_42_OLED  // enable this if you're using the .42" oled and not the standard .96" or 1.3"
+#define C3_42_OLED  // ESP32 C3 super mini, with or without .42" oled and not the standard .96" or 1.3"
 //#define WEMOS_MINI_32  //S3 D1 Mini with generic 128x64 OLED
 //#define S2_mini  // WEMOS s2 mini
 
@@ -22,7 +22,7 @@
 #define USE_MODBUS
 
 // remark out MY_OLED for Non - LED deployment
-#define MY_OLED OLED_128x64  //72x40 displays in center of 128x64 field
+//#define MY_OLED OLED_128x64  //72x40 displays in center of 128x64 field
 #define OLED_WIDTH 128
 #define OLED_HEIGHT 64
 
@@ -514,7 +514,6 @@ uint16_t processActions(uint16_t queued_units_to_process, u_long millis_now) {
 
       if ((active_flow == 0) && (relay_status == 1) && (relay_latchmode < 2) && (relay_set_by_modbus == 0)) {  // if relay is on and flow stops
         setRelay(0);
-        queued_units_to_process = 0;
       }
 
       if ((horn_units > 0) && (this_flow_units >= horn_units) && (active_flow == 1) && (horn_status == 0)) {  // Trigger an output event
@@ -528,12 +527,11 @@ uint16_t processActions(uint16_t queued_units_to_process, u_long millis_now) {
 
       if ((active_flow == 0) && (horn_status == 1) && (horn_latchmode < 2) && (horn_set_by_modbus == 0)) {  // if horn is on and flow stops
         setHorn(0);
-        queued_units_to_process = 0;
       }
+      queued_units_to_process = 0;
       break;
 
     case 2:
-      queued_units_to_process = 0;
       if ((relay_seconds > 0) && (flow_time_since_boot >= relay_seconds) && (active_flow == 1) && (relay_status == 0)) {
         setRelay(1);
       }
@@ -544,7 +542,6 @@ uint16_t processActions(uint16_t queued_units_to_process, u_long millis_now) {
       break;
 
     case 3:
-      queued_units_to_process = 0;
       if ((relay_units > 0) && (units_since_boot >= relay_units) && (active_flow == 1) && (relay_status == 0)) {
         setRelay(1);
       }
@@ -555,7 +552,6 @@ uint16_t processActions(uint16_t queued_units_to_process, u_long millis_now) {
       break;
 
     case 4:
-      queued_units_to_process = 0;
       if ((relay_seconds > 0) && (flow_time_since_boot >= relay_seconds) && (active_flow == 1) && (relay_status == 0)) {
         setRelay(1);
       }
@@ -572,7 +568,6 @@ uint16_t processActions(uint16_t queued_units_to_process, u_long millis_now) {
       break;
 
     case 5:
-      queued_units_to_process = 0;
       if ((relay_seconds > 0) && (this_flow_duration >= relay_seconds) && (this_flow_units < relay_units) && (active_flow == 1) && (relay_status == 0)) {
         setRelay(1);
       }
