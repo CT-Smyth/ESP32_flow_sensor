@@ -53,6 +53,8 @@ void saveSettings() {
     keystore.putUShort("analog_r_max", analog_range_max);
     keystore.putUShort("flowrate_sec", flowRate_seconds);
     keystore.putUShort("def_disp_mode", default_display_mode);
+    keystore.putUShort("legacy_pin", legacy_pin_mode);
+
     keystore.end();
   }
 }
@@ -146,6 +148,7 @@ void loadSettings() {
   analog_range_max = keystore.getUShort("analog_r_max", 0);
   flowRate_seconds = keystore.getUShort("flowrate_sec", 0);
   default_display_mode = keystore.getUShort("def_disp_mode", 0);
+  legacy_pin_mode = keystore.getUShort("legacy_pin", 0);
   display_mode = default_display_mode;
   keystore.end();
   configure_interrupt_type();

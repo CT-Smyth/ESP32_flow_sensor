@@ -42,8 +42,8 @@ static uint8_t *ucBackBuffer = NULL;
 #define ledPin 8
 #define hornPin 4
 #define relayPin 3
-#define pulse_in_pin 2
-#define button_in_pin 9
+#define pulse_in_pin 2  //should be moved to zero or ten?
+#define button_in_pin 9 
 #define analog_pin 1
 #define SDA_PIN 5 //INTERNAL
 #define SCL_PIN 6 //INTERNAL
@@ -155,6 +155,8 @@ const int ANALOG_RANGE_MIN = 29;
 const int ANALOG_RANGE_MAX = 30;  // IF Zero, Mapping is off.
 const int FLOWRATE_SECONDS = 31;
 const int ADD_TOTAL_UNITS = 32;
+const int LEGACY_PIN_MODE = 33;
+
 
 // data variables
 uint16_t lifetime_units_MSW;
@@ -198,6 +200,7 @@ uint16_t analog_map_max = 4095;  // set to reflect raw data / 10 by default
 uint16_t analog_range_min = 0;
 uint16_t analog_range_max = 4095;
 uint16_t flowRate_seconds = 60;  // for units per minute
+uint16_t legacy_pin_mode = 0;
 
 //misc things to store in flash:
 uint16_t valid_flash;
